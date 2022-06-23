@@ -143,7 +143,7 @@ plot2 = function() {
 	draw(ht, column_title = "B) Mark annotation")
 }
 
-p2 = grid.grabExpr(plot2(), height = 10*1.2/2.2, width = 15*2/8)
+p2 = grid.grabExpr(plot2(), height = 10*1.2/2.3, width = 15*2/8)
 
 library(ggplot2)
 
@@ -169,7 +169,7 @@ plot3 = function() {
 	draw(ht, column_title = "C) Link annotation")
 }
 
-p3 = grid.grabExpr(plot3(), height = 10*1.2/2.2, width = 15*3/8)
+p3 = grid.grabExpr(plot3(), height = 10*1.2/2.3, width = 15*3/8)
 
 plot4 = function() {
 	library(circlize)
@@ -184,18 +184,18 @@ plot4 = function() {
 	ht = Heatmap(mat, name = "mat", cluster_rows = FALSE, row_split = split,
 	    right_annotation = rowAnnotation(wc = anno_textbox(split, text, max_width = unit(8, "cm")))
 	)
-	draw(ht, column_title = "D) Textbox anotation")
+	draw(ht, column_title = "D) Textbox annotation")
 }
 
-p4 = grid.grabExpr(plot4(), height = 10*1.2/2.2, width = 15*3/8)
+p4 = grid.grabExpr(plot4(), height = 10*1.2/2.3, width = 15*3/8)
 
 library(cowplot)
 
-p_empty = rectGrob(gp = gpar(col = NA, fill = NA))
+p_empty = textGrob("A) Different annotation graphics supported in ComplexHeatmap", gp = gpar(fontsize = 12))
 
 pdf("figure3.pdf", width = 15, height = 10)
 print(plot_grid(p_empty, p1, 
 	plot_grid(p2, p3, p4, nrow = 1, rel_widths = c(1.5, 3, 3)), 
-	nrow = 3, rel_heights = c(0.1, 0.9, 1.2)))
+	nrow = 3, rel_heights = c(0.2, 0.9, 1.2)))
 dev.off()
 

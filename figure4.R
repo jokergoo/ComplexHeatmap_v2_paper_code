@@ -36,32 +36,32 @@ anno_gene_col = structure(brewer.pal(length(unique(anno_gene)), "Set1"),
 dist_col_fun = colorRamp2(c(0, 10000), c("black", "white"))
 enhancer_col_fun = colorRamp2(c(0, 1), c("white", "orange"))
 
-ha = HeatmapAnnotation(type = type, 
-    col = list(type = c("Tumor" = "pink", "Control" = "royalblue")),
+ha = HeatmapAnnotation(Type = type, 
+    col = list(Type = c("Tumor" = "pink", "Control" = "royalblue")),
     annotation_name_side = "left", 
-    annotation_legend_param = list(type = list(direction = "horizontal")))
+    annotation_legend_param = list(Type = list(direction = "horizontal")))
 ha2 = HeatmapAnnotation(type = type, 
     col = list(type = c("Tumor" = "pink", "Control" = "royalblue")), 
     show_legend = FALSE)
 
-ht_list = Heatmap(mat_meth, name = "methylation", col = meth_col_fun,
+ht_list = Heatmap(mat_meth, name = "Methylation", col = meth_col_fun,
     column_order= column_order,
     top_annotation = ha, column_title = "Methylation",
     heatmap_legend_param = list(direction = "horizontal", legend_width = unit(3, "cm"))) +
-    Heatmap(direction, name = "direction", col = direction_col,
+    Heatmap(direction, name = "Direction", col = direction_col,
     	heatmap_legend_param = list(direction = "horizontal")) +
-    Heatmap(mat_expr[, column_tree$order], name = "expression", 
+    Heatmap(mat_expr[, column_tree$order], name = "Expression", 
         col = expr_col_fun, 
         column_order = column_order, 
         top_annotation = ha2, column_title = "Expression",
         heatmap_legend_param = list(direction = "horizontal", legend_width = unit(3, "cm"))) +
     Heatmap(cor_pvalue, name = "p-value", col = pvalue_col_fun,
     	heatmap_legend_param = list(direction = "horizontal", at = c(0, 2, 4), labels = c("1", "0.01", "<1e-4"))) +
-    Heatmap(gene_type, name = "gene type", col = gene_type_col,
+    Heatmap(gene_type, name = "Gene type", col = gene_type_col,
     	heatmap_legend_param = list(direction = "horizontal",  nrow = 2)) +
-    Heatmap(anno_gene, name = "gene annotation", col = anno_gene_col,
+    Heatmap(anno_gene, name = "Gene annotation", col = anno_gene_col,
     	heatmap_legend_param = list(direction = "horizontal", nrow = 2)) +
-    rowAnnotation(dist_to_TSS = anno_points((dist+1), width = unit(4, "cm"))) +
+    rowAnnotation("Distance to TSS" = anno_points((dist+1), width = unit(4, "cm"))) +
     Heatmap(anno_enhancer, name = "Enhancer", col = enhancer_col_fun, 
         cluster_columns = FALSE, column_title = "Enhancer",
         heatmap_legend_param = list(direction = "horizontal", legend_width = unit(3, "cm")))
@@ -105,8 +105,7 @@ rowAnnotation("cgi_anno" = anno_barplot(cgi_anno, bar_width = 1, gp = gpar(fill 
     width = anno_width), show_annotation_name = FALSE) +
 Heatmap(mat_enrich_gf, name = "enrich_gf", col = z_score_col_fun, cluster_columns = FALSE,
     width = unit(ncol(mat_enrich_gf)*4, "mm"), column_title = "", column_names_rot = 45,
-    column_names_gp = gpar(fontsize = 9),
-    heatmap_legend_param = list(title = "Z-score",direction = "horizontal", legend_width = unit(4, "cm"))) +
+    column_names_gp = gpar(fontsize = 9), show_heatmap_legend = FALSE) +
 rowAnnotation("pct_st" = anno_barplot(mat_pct_st, bar_width = 1, gp = gpar(fill = state_col), 
     width = anno_width), show_annotation_name = FALSE) +
 Heatmap(mat_enrich_st, name = "enrich_st", col = z_score_col_fun, cluster_columns = FALSE, 
@@ -114,12 +113,17 @@ Heatmap(mat_enrich_st, name = "enrich_st", col = z_score_col_fun, cluster_column
     column_names_gp = gpar(col = state_col, fontsize = 9), show_row_names = FALSE, column_names_rot = 45)
 
 lgd_list = list(
+    Legend(labels = c("negative", "positive"), title = "Correlation",
+        legend_gp = gpar(fill = c("green", "red"))),
     Legend(labels = c("gene", "intergenic"), title = "Gene annotation", 
         legend_gp = gpar(fill = gene_anno_col)),
     Legend(labels = c("<1kb", "1kb~5kb", "5kb~10kb", ">10kb"), title = "Distance to TSS", 
         legend_gp = gpar(fill = dist_tss_col), nrow = 2),
     Legend(labels = c("CGI", "CGI shore"), title = "CGI annotation", 
         legend_gp = gpar(fill = cgi_anno_col)),
+    Legend(col_fun = z_score_col_fun, title = "Z-score",direction = "horizontal", 
+        at = c(-200, 0, 200),
+        legend_width = unit(3, "cm")),
     Legend(labels = colnames(mat_enrich_st), title = "Chromatin states", 
         legend_gp = gpar(fill = state_col), nrow = 2)
 )
@@ -143,6 +147,7 @@ p2 = grid.grabExpr({
 	        grid.text(ht_title[an], y = unit(1, "npc") + unit(3, "mm"), just = "bottom")
 	    })
 	}
+    grid.text("B) global summary statistics ...", y = unit(1, "npc") - unit(4, "mm"), gp = gpar(fontsize = 13.2))
 }, width = 12)
 
 library(cowplot)

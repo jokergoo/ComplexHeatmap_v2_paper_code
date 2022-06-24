@@ -8,7 +8,7 @@ mat_expr = res_list$mat_expr
 direction = res_list$direction
 cor_pvalue = res_list$cor_pvalue
 gene_type = res_list$gene_type
-anno_gene = res_list$anno_gene
+anno_gene = res_list$anno_gene; anno_gene[anno_gene == "TSS"] = "promoter"
 anno_enhancer = res_list$anno_enhancer
 
 dist = sapply(1:nrow(mat_meth), function(i) {
@@ -61,13 +61,14 @@ ht_list = Heatmap(mat_meth, name = "Methylation", col = meth_col_fun,
     	heatmap_legend_param = list(direction = "horizontal",  nrow = 2)) +
     Heatmap(anno_gene, name = "Gene annotation", col = anno_gene_col,
     	heatmap_legend_param = list(direction = "horizontal", nrow = 2)) +
-    rowAnnotation("Distance to TSS" = anno_points((dist+1), width = unit(4, "cm"))) +
+    rowAnnotation("Distance to TSS" = anno_points(dist, width = unit(4, "cm"), axis_param = list(at = c(0, 20000, 40000), labels = c("0kb", "20kb", "40kb")))) +
     Heatmap(anno_enhancer, name = "Enhancer", col = enhancer_col_fun, 
         cluster_columns = FALSE, column_title = "Enhancer",
         heatmap_legend_param = list(direction = "horizontal", legend_width = unit(3, "cm")))
 
 p1 = grid.grabExpr(draw(ht_list, row_km = 2, row_split = direction,
-    column_title = "A) Comprehensive correspondence between methylation, expression and other genomic features", 
+    column_title = "A) Visualize the associations between methylation, expression and other genomic features", 
+    padding = unit(c(2, 2, 8, 2), "mm"),
     merge_legends = TRUE, heatmap_legend_side = "bottom"), width = 12)
 
 
@@ -147,7 +148,7 @@ p2 = grid.grabExpr({
 	        grid.text(ht_title[an], y = unit(1, "npc") + unit(3, "mm"), just = "bottom")
 	    })
 	}
-    grid.text("B) global summary statistics ...", y = unit(1, "npc") - unit(4, "mm"), gp = gpar(fontsize = 13.2))
+    grid.text("B) Visualize the global summary statistics in a multi-omics study", y = unit(1, "npc") - unit(4, "mm"), gp = gpar(fontsize = 13.2))
 }, width = 12)
 
 library(cowplot)

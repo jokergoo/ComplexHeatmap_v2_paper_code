@@ -7,12 +7,15 @@ m = cbind(matrix(rnorm(10*100), ncol = 10),
           matrix(runif(10*100, min = -2, max = 2) + 0.5, ncol = 10))
 colnames(m) = paste0("C", 1:ncol(m))
 
-ha1 = HeatmapAnnotation(distribution = c(rep("rnorm", 10), rep("runif", 10)), col = list(distribution = c("rnorm" = 2, "runif" =3)))
+ha1 = HeatmapAnnotation(Distribution = c(rep("rnorm", 10), rep("runif", 10)), col = list(Distribution = c("rnorm" = 2, "runif" =3)))
 p1 = grid.grabExpr(draw(densityHeatmap(m, ylab = "Value", top_annotation = ha1, column_title = "A) Density heatmap"), merge_legends = TRUE))
 
 
-p2 = grid.grabExpr(draw(frequencyHeatmap(m, ylab = "Value", top_annotation = ha1, use_3d = TRUE, column_title = "B) 3D frequency heatmap")))
+ht_opt$HEATMAP_LEGEND_PADDING = unit(4, "mm")
+p2 = grid.grabExpr(draw(frequencyHeatmap(m,  ylab = "Value", top_annotation = ha1, use_3d = TRUE, column_title = "B) 3D frequency heatmap"), merge_legends = TRUE))
 
+
+ht_opt$HEATMAP_LEGEND_PADDING = unit(2, "mm")
 
 mat = read.table(system.file("extdata", package = "ComplexHeatmap", 
     "tcga_lung_adenocarcinoma_provisional_ras_raf_mek_jnk_signalling.txt"), 
@@ -214,9 +217,9 @@ ht_opt$TITLE_PADDING = unit(c(4, 4), "points")
 ht_list = Heatmap(t(num_mat), name = "mat", col = colorRamp2(c(-1, 0, 1), c("green", "white", "red")),
     column_split = chr, cluster_columns = FALSE, show_row_dend = FALSE,
     row_split = subgroup, cluster_row_slices = FALSE, 
-    left_annotation = rowAnnotation(subgroup = subgroup, show_annotation_name = FALSE,
+    left_annotation = rowAnnotation(Subgroup = subgroup, show_annotation_name = FALSE,
         annotation_legend_param = list(
-            subgroup = list(direction = "horizontal", title_position = "lefttop", nrow = 1))),
+            Subgroup = list(direction = "horizontal", title_position = "lefttop", nrow = 1))),
     column_title_gp = gpar(fontsize = 10), border = TRUE,
     column_gap = unit(0, "points"),
     column_title = ifelse(1:22 %% 2 == 0, paste0("\n", chr_level), paste0(chr_level, "\n")),
@@ -233,7 +236,7 @@ HeatmapAnnotation(points = anno_points(v, gp = gpar(col = 4:5), pch = c(1, 16)),
 HeatmapAnnotation(bars = anno_barplot(v[, 1], gp = gpar(col = ifelse(v[ ,1] > 0, 2, 3))), 
     annotation_name_side = "left", height = unit(2, "cm"))
 p5 = grid.grabExpr(draw(ht_list, heatmap_legend_side = "bottom", merge_legend = TRUE,
-    column_title = "E) Genome-level multi-track heatmap"), width = 14)
+    column_title = "E) Genome-level multi-track heatmap"), width = 12)
 
 
 

@@ -84,11 +84,11 @@ split = factor(split, levels = c("active", "bivalent", "inactive"))
 pdf("figure6.pdf", width = 8, height = 10)
 meth_col_fun = colorRamp2(c(0, 0.5, 1), c("blue", "white", "red"))
 ht_list = EnrichedHeatmap(mat_states, name = "States", col = states_col, cluster_rows = TRUE, 
-    row_split = split, 
+    row_split = split, use_raster = TRUE, raster_quality = 4,
     top_annotation = HeatmapAnnotation(enrich = anno_enriched(gp = gpar(lty = 3:1)))) +
-EnrichedHeatmap(mat_meth, name = "Methylation", col = meth_col_fun,
+EnrichedHeatmap(mat_meth, name = "Methylation", col = meth_col_fun, use_raster = TRUE,raster_quality = 4,
     top_annotation = HeatmapAnnotation(enrich = anno_enriched(gp = gpar(lty = 3:1)))) +
-Heatmap(e, name = "Expression", 
+Heatmap(e, name = "Expression", use_raster = TRUE,raster_quality = 4,
     show_row_names = FALSE, width = unit(1, "cm"), show_column_names = FALSE,
     top_annotation = HeatmapAnnotation(summary = anno_summary(gp = gpar(lty = 3:1),
         outline = FALSE, axis_param = list(side = "right"))))
